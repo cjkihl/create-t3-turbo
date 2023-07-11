@@ -2,10 +2,16 @@ import { createNextApiHandler } from "@trpc/server/adapters/next";
 
 import { appRouter, createTRPCContext } from "@acme/api";
 
+import { authOptions } from "~/auth-options";
+import { env } from "~/env.mjs";
+
 // export API handler
 export default createNextApiHandler({
   router: appRouter,
-  createContext: createTRPCContext,
+  createContext: createTRPCContext({
+    connectionString: env.DATABASE_URL,
+    authOptions,
+  }),
 });
 
 // If you need to enable cors, you can do so like this:

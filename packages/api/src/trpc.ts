@@ -8,11 +8,15 @@
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import {
+  getServerSession,
+  type NextAuthOptions,
+  type Session,
+} from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { getServerSession, type Session } from "@acme/auth";
-import { prisma } from "@acme/db";
+import { getClient, type DbClient } from "@acme/db";
 
 /**
  * 1. CONTEXT
@@ -25,6 +29,7 @@ import { prisma } from "@acme/db";
  */
 type CreateContextOptions = {
   session: Session | null;
+  db: DbClient;
 };
 
 /**
@@ -37,27 +42,33 @@ type CreateContextOptions = {
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
-  return {
-    session: opts.session,
-    prisma,
-  };
+  return opts;
 };
+
+interface CreateTRPCContextOptions {
+  connectionString: string;
+  authOptions: NextAuthOptions;
+}
 
 /**
  * This is the actual context you'll use in your router. It will be used to
  * process every request that goes through your tRPC endpoint
  * @link https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts;
+export const createTRPCContext =
+  ({ connectionString, authOptions }: CreateTRPCContextOptions) =>
+  async (opts: CreateNextContextOptions) => {
+    const { req, res } = opts;
 
-  // Get the session from the server using the unstable_getServerSession wrapper function
-  const session = await getServerSession({ req, res });
+    const db = getClient({ connectionString });
 
-  return createInnerTRPCContext({
-    session,
-  });
-};
+    // Get the session from the server using the unstable_getServerSession wrapper function
+    const session = await getServerSession(req, res, authOptions);
+    return createInnerTRPCContext({
+      session,
+      db,
+    });
+  };
 
 /**
  * 2. INITIALIZATION
@@ -65,7 +76,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  * This is where the trpc api is initialized, connecting the context and
  * transformer
  */
-const t = initTRPC.context<typeof createTRPCContext>().create({
+const t = initTRPC.context<ReturnType<typeof createTRPCContext>>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {

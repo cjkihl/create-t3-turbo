@@ -1,16 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+// Choose driver here TODO edge environments don't support dynamic imports yet
+//export * from "./pg/connections/postgres";
+// export * from "./pg/connections/neon";
+// export * from "./mysql2/connections/mysql2";
+export * from "./mysql2/connections/planetscale";
 
-export * from "@prisma/client";
-
-const globalForPrisma = globalThis as { prisma?: PrismaClient };
-
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
-  });
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+export interface DbClientOptions {
+  connectionString: string;
+}

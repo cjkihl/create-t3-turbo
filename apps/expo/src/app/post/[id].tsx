@@ -6,7 +6,7 @@ import { api } from "~/utils/api";
 function Post() {
   const { id } = useSearchParams();
   if (!id || typeof id !== "string") throw new Error("unreachable");
-  const { data } = api.post.byId.useQuery({ id });
+  const { data } = api.post.byId.useQuery({ id: parseInt(id) });
 
   if (!data) return <SplashScreen />;
 

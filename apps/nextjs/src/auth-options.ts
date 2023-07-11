@@ -1,10 +1,10 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type DefaultSession, type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 
-import { prisma } from "@acme/db";
+import { DrizzleAdapter } from "@acme/auth";
+import { getClient } from "@acme/db";
 
-import { env } from "../env.mjs";
+import { env } from "./env.mjs";
 
 /**
  * Module augmentation for `next-auth` types
@@ -42,7 +42,11 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  adapter: DrizzleAdapter(
+    getClient({
+      connectionString: env.DATABASE_URL,
+    }),
+  ),
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
