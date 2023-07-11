@@ -1,5 +1,5 @@
 import { SafeAreaView, Text, View } from "react-native";
-import { SplashScreen, Stack, useSearchParams } from "expo-router";
+import { Stack, useSearchParams } from "expo-router";
 
 import { api } from "~/utils/api";
 
@@ -8,7 +8,8 @@ function Post() {
   if (!id || typeof id !== "string") throw new Error("unreachable");
   const { data } = api.post.byId.useQuery({ id: parseInt(id) });
 
-  if (!data) return <SplashScreen />;
+  // TODO render empty state
+  if(!data) return null;
 
   return (
     <SafeAreaView className="bg-[#1F104A]">

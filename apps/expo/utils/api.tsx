@@ -27,8 +27,7 @@ const getBaseUrl = () => {
    * baseUrl to your production API URL.
    */
   const debuggerHost =
-    Constants.manifest?.debuggerHost ??
-    Constants.manifest2?.extra?.expoGo?.debuggerHost;
+    Constants.expoGoConfig?.debuggerHost;
   const localhost = debuggerHost?.split(":")[0];
   if (!localhost) {
     // return "https://your-production-url.com";

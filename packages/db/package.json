@@ -10,6 +10,7 @@
     "lint:fix": "pnpm lint --fix",
     "type-check": "tsc --noEmit",
     "pg:push": "pnpm echo \"Push for postgres not yet supported\"",
+    "drizzle-kit": "pnpm with-env drizzle-kit",
     "pg:generate": "pnpm with-env drizzle-kit generate:pg",
     "pg:migrate": "pnpm with-env node -r @swc-node/register pg/run-migrations.ts",
     "mysql:push": "pnpm with-env drizzle-kit push:mysql",
@@ -21,8 +22,8 @@
   "dependencies": {
     "@neondatabase/serverless": "^0.4.26",
     "@planetscale/database": "^1.8.0",
-    "drizzle-orm": "^0.27.0",
-    "mysql2": "^3.5.0",
+    "drizzle-orm": "^0.27.1",
+    "mysql2": "^3.5.1",
     "postgres": "^3.3.5"
   },
   "devDependencies": {
@@ -30,7 +31,7 @@
     "dotenv-cli": "^7.2.1",
     "drizzle-kit": "^0.19.3",
     "pg": "^8.11.1",
-    "type-fest": "^3.12.0",
-    "typescript": "^5.1.3"
+    "type-fest": "^3.13.0",
+    "typescript": "^5.1.6"
   }
 }
