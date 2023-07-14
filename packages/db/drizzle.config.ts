@@ -10,5 +10,5 @@ export default {
   },
   schema: `${driver}/schema/*`,
   out: `${driver}/migrations`,
-  driver: "mysql2",
+  driver,
 } satisfies Config;
