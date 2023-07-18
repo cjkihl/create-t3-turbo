@@ -9,6 +9,6 @@ export default {
     connectionString: env.DATABASE_URL,
   },
   schema: `${driver}/schema/*`,
-  out: `${driver}/migrations`,
+  out: `${driver}/.drizzle`,
   driver,
 } satisfies Config;

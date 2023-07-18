@@ -13,9 +13,11 @@
     "drizzle-kit": "pnpm with-env drizzle-kit",
     "pg:generate": "pnpm with-env drizzle-kit generate:pg",
     "pg:migrate": "pnpm with-env node -r @swc-node/register pg/run-migrations.ts",
+    "pg:reset": "pnpm with-env node -r @swc-node/register pg/run-reset.ts",
     "mysql:push": "pnpm with-env drizzle-kit push:mysql",
     "mysql:generate": "pnpm with-env drizzle-kit generate:mysql",
     "mysql:migrate": "pnpm with-env node -r @swc-node/register mysql2/run-migrations.ts",
+    "mysql:reset": "pnpm with-env node -r @swc-node/register mysql/run-reset.ts",
     "dev": "pnpm with-env drizzle-kit studio --port 5556",
     "with-env": "dotenv -e ../../.env --"
   },
